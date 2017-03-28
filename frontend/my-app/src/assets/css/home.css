@@ -1,0 +1,142 @@
+.col-lg-9.col-md-9.col-sm-12.col-xs-12 {
+  padding-top:50px;
+}
+
+#homeNav.container-fluid {
+    padding-top: 10px;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: 227px;
+    margin-left: 227px;
+}
+
+#homeNav.navbar-brand, #homeNav.navbar-nav > li > a {
+    text-shadow: 0 1px 0 rgba(255,255,255,.25);
+    color: darkgray;
+    font-size: large;
+    font-weight: bolder;
+}
+
+#homeNav.navbar-toggle {
+    position: relative;
+    float: right;
+    width: 6%;
+    padding: 9px 10px;
+    margin-top: 2%;
+    margin-right: 4%;
+    margin-bottom: 0%;
+    background-color: #5bc0de;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+#homeNav.navbar-brand {
+    float: left;
+    height: 50px;
+    padding: 5px 5px;
+    font-size: 18px;
+    line-height: 20px;
+}
+
+#homeContent.Content {
+  margin-left: 5%;
+  margin-right: 12%;
+}
+
+#morefriends.thumbnail {
+    display: block;
+    padding: 0px;
+    margin-bottom: 20px;
+    line-height: 1.42857143;
+    background-color: #fff;
+    border: 0px solid #fff;
+    border-radius: 4px;
+    -webkit-transition: border .2s ease-in-out;
+    -o-transition: border .2s ease-in-out;
+    transition: border .2s ease-in-out;
+}
+
+.media-body #text {
+  width: 90%;
+  margin-left: 5%;
+  margin-right: 5%;
+  margin-bottom: 2%;
+}
+
+#choosefile {
+  border: 0px;
+}
+
+.moreusers {
+  margin-left: 10%;
+  margin-right: 10%;
+  margin-bottom: 0%;
+}
+
+#followers.imageheader {
+  padding-top: 8%;
+  padding-right: 10%;
+}
+
+.pull-left > button {
+  margin-left: 8px;
+  margin-top: 3px;
+}
+
+.text-muted {
+  margin-left: 5px;
+}
+
+.panel-body#hometweet {
+    border: 0px;
+    border-radius: 4px;
+    margin-bottom: 25px;
+    box-shadow: -4px 3px 20px 0px rgba(0, 0, 0, 0.32);
+}
+
+#firstPannel.panel.panel-default {
+    border: 0px;
+    border-radius: 4px;
+    margin-bottom: 50px;
+    box-shadow: -4px 3px 20px 0px rgba(0, 0, 0, 0.32);
+  }
+
+#follow.panel.panel-default {
+    border: 0px;
+    border-radius: 4px;
+    margin-bottom: 2%;
+    margin-top: 5%;
+    margin-left: 20%;
+    margin-right: -5%;
+   box-shadow: -6px 7px 20px 0px rgba(0, 0, 0, 0.32);
+}
+
+strong#followheader {
+color: grey;
+}
+
+.panel {
+  border: 0px;
+}
+
+@media screen and (max-width: 992px) {
+  #homeNav.container-fluid {margin-left:0; margin-right:0;}
+  #follow.panel.panel-default{margin-left: 30%; margin-right: 30%}
+  #homeContent.Content { margin-left: 0%; margin-right: 0%;}
+}
+
+@media screen and (max-width: 768px) {
+  #homeNav.navbar-toggle {padding: 5px 0px;}
+  #homeNav.container-fluid {margin-left:0; margin-right:0;}
+  #follow.panel.panel-default{margin-left: 0%; margin-right: 0%}
+
+}
+@media screen and (max-width: 454px) {
+  #homeNav.navbar-toggle {padding: 5px 0px;}
+
+}
+@media screen and (max-width: 316px) {
+  #homeNav.navbar-toggle {padding: 5px 0px;}
+
+}
