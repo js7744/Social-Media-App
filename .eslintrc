@@ -1,0 +1,23 @@
+root: true
+
+env:
+  node: true
+  es6: true
+
+extends:
+  "airbnb-base"
+
+globals:
+  log: true
+
+
+
+rules:
+  no-unused-vars: [1, { "varsIgnorePattern": "^should$" }]
+  vars-on-top: 0
+
+  # Warnings
+  max-len: [1]
+
+  # Errors
+  quotes: [1, "single", { "avoidEscape": true, "allowTemplateLiterals": true }]

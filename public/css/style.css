@@ -1,0 +1,308 @@
+/* Links */
+a{
+  color: #fff;
+}
+a:hover {
+  color: #4d51ab;
+}
+
+
+/* Custom default button */
+.btn-default,
+.btn-default:hover,
+.btn-default:focus {
+  color: #265a88;
+  text-shadow: none; /* Prevent inheritance from `body` */
+  border: 0px solid #fff;
+}
+/*
+ * Base structure
+ */
+
+html,
+body {
+  height: 100%;
+  background-color: #fff;
+  color: #fff;
+  text-align: center;
+  text-shadow: 0 0px 0px rgba(0,0,0,.5);
+  background-color: #fff;
+}
+
+.alert {
+  color: #4d51ab ;
+}
+
+/* Extra markup and styles for table-esque vertical and horizontal centering */
+.site-wrapper {
+  display: table;
+  width: 100%;
+  height: 100%; /* For at least Firefox */
+  min-height: 100%;
+  -webkit-box-shadow: inset 0 0 100px rgba(0,0,0,.5);
+          box-shadow: inset 0 0 100px rgba(0,0,0,.5);
+}
+.site-wrapper-inner {
+  display: table-cell;
+  vertical-align: top;
+}
+.cover-container {
+  margin-right: auto;
+  margin-left: auto;
+}
+
+/* Padding for spacing */
+.inner {
+  padding: 30px;
+}
+.textarea {
+  padding: 10px
+}
+.chip {
+    float: right;
+    display: inline-block;
+    padding: 10px 25px;
+    height: 30px;
+    font-size: 15px;
+    line-height: 30px;
+    border-radius: 15px;
+
+}
+
+.logout {
+  float: right;
+  line-height: 45px;
+
+}
+
+.chip img {
+    float: left;
+    margin: 0 20px 0 -30px;
+    height: 25px;
+    width: 25px;
+    border-radius: 30%;
+}
+
+.tweet {
+  float: right;
+  padding: 10px 25px;
+  margin: 0 10px 0 -25px;
+  height: 25px;
+  margin-top: 0px;
+}
+
+
+/*
+ * Header
+ */
+.masthead-brand {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.masthead-nav > li {
+  display: inline-block;
+}
+.masthead-nav > li + li {
+  margin-left: 30px;
+}
+.masthead-nav > li > a {
+  padding-right: 0;
+  padding-left: 0;
+  font-size: 16px;
+  font-weight: bold;
+  color: #265a88;
+  color: rgba(255,255,255,.75);
+  border-bottom: 2px solid transparent;
+}
+.masthead-nav > li > a:hover,
+.masthead-nav > li > a:focus {
+  background-color: transparent;
+  border-bottom-color: #a9a9a9;
+  border-bottom-color: rgba(255,255,255,.25);
+}
+.masthead-nav > .active > a,
+.masthead-nav > .active > a:hover,
+.masthead-nav > .active > a:focus {
+  color: #265a88;
+  border-bottom-color: #265a88;
+}
+.navbar-toggle {
+    position: relative;
+    float: right;
+    padding: 9px 10px;
+    margin-top: 8px;
+    margin-right: 15px;
+    margin-bottom: 8px;
+    background-color: transparent;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+@media (min-width: 768px) {
+  .masthead-brand {
+    float: left;
+  }
+  .masthead-nav {
+    float: right;
+  }
+}
+#logbox {
+        padding: 10px;
+        margin: 50px auto;
+        width: 340px;
+        background-color: transparent;
+        -webkit-box-shadow: 0 0px 0px rgba(0, 0, 0, 0.25);
+        -moz-box-shadow: 0 0px 0px rgba(0, 0, 0, 0.25);
+        box-shadow: 0 1px 5px rgba(0, 0, 0, 0.25);
+    }
+#logbox > h1 {
+        text-align: center;
+        font-size: 175%;
+        color: #fff;
+        font-weight: 300;
+    }
+
+#logbox > h1, input {
+        font-family: "Open Sans", Helvetica, sans-serif;
+    }
+
+.input {
+    width: 75%;
+    height: 50px;
+    display: block;
+    margin: 0 auto 15px;
+    padding: 0 15px;
+    border: none;
+    background-color: #4d51ab;
+}
+.input:focus {
+    outline: none;
+    border-bottom-color: #3CC !important;
+}
+.input:hover {
+    border-bottom-color: #dcdcdc;
+}
+.input:invalid {
+    box-shadow: none;
+}
+
+.pass:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 0px white inset;
+}
+
+.inputButton {
+    position: relative;
+    width: 85%;
+    height: 50px;
+    display: block;
+    margin: 30px auto 30px;
+    color: white;
+    background-color: #3CC;
+    border: none;
+    -webkit-box-shadow: 0 5px 0 #2CADAD;
+    -moz-box-shadow: 0 5px 0 #2CADAD;
+    box-shadow: 0 5px 0 #2CADAD;
+}
+.inputButton:hover {
+    top: 2px;
+    -webkit-box-shadow: 0 3px 0 #2CADAD;
+    -moz-box-shadow: 0 3px 0 #2CADAD;
+    box-shadow: 0 3px 0 #2CADAD;
+}
+.inputButton:active {
+    top: 5px;
+    box-shadow: none;
+}
+.inputButton:focus {
+    outline: none;
+}
+
+.btn-primary {
+    background-image: linear-gradient(to bottom,#d58bca 0,#db84ce 100%);
+    border-color: #d58bca;
+}
+.btn-primary:focus,
+.btn-primary:hover {
+    background-color: #e6a8dc;
+    background-position: 0 -50px;
+}
+
+/*
+ * Cover
+ */
+
+.coverimg {
+  background: url('../images/signup_bg.jpg') no-repeat #5439af;
+  background-size: cover;
+}
+
+.cover {
+  padding: 0 20px;
+}
+.cover .btn-lg {
+  padding: 20px 30px;
+  font-weight: bold;
+}
+
+#myprofile {
+  margin-top: 30px;
+  margin-left: 10px;
+}
+
+/*
+ * Footer
+ */
+
+.mastfoot {
+  text-align: center;
+  color: #fff; /* IE8 proofing */
+}
+
+
+/*
+ * Affix and center
+ */
+
+@media (min-width: 768px) {
+  /* Pull out the header and footer */
+  .masthead {
+    position: relative;
+    top: 0;
+  }
+  .mastfoot {
+    position: relative;
+    bottom: 0;
+  }
+  /* Start the vertical centering */
+  .site-wrapper-inner {
+    vertical-align: middle;
+  }
+  /* Handle the widths */
+  .masthead,
+  .mastfoot,
+  .cover-container {
+    width: 100%; /* Must be percentage or pixels for horizontal alignment */
+  }
+}
+
+@media (min-width: 992px) {
+  .masthead,
+  .mastfoot,
+  .cover-container {
+    width: 700px;
+  }
+}
+
+.time {
+  float: right;
+  opacity: 0.5;
+}
+
+.widthLogout {
+  width: 80px;
+  float: right;
+
+}
+
