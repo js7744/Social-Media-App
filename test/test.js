@@ -82,10 +82,10 @@ describe('index', () => {
     });
   });
 
-  describe(`GET /home/ + ${registeruser.userdata.id}`, () => {
+  describe(`GET /home/${registeruser.userdata.id}`, () => {
     it('should return home page', (done) => {
       request(app)
-      .get(`/home/ + ${registeruser.userdata.id}`)
+      .get(`/home/${registeruser.userdata.id}`)
       .expect(200)
       .end((err, res) => {
         if (err) {
@@ -150,10 +150,10 @@ describe('index', () => {
   });
 
 
-  describe(`GET /profile/ + ${registeruser.userdata.id}`, () => {
+  describe(`GET /profile/${registeruser.userdata.id}`, () => {
     it(' should return profile page', (done) => {
       request(app)
-      .get(`/profile/ + ${registeruser.userdata.id}`)
+      .get(`/profile/${registeruser.userdata.id}`)
       .expect(200)
       .end((err, res) => {
         if (err) {
@@ -166,10 +166,10 @@ describe('index', () => {
     });
   });
 
-  describe(`POST /editprofile/ + ${registeruser.userdata.id}`, () => {
+  describe(`POST /editprofile/${registeruser.userdata.id}`, () => {
     it('user can edit their profile', (done) => {
       request(app)
-        .post(`/editprofile/ + ${registeruser.userdata.id}`)
+        .post(`/editprofile/${registeruser.userdata.id}`)
         .send(editprofile)
         .expect(200)
         .end((err, res) => {

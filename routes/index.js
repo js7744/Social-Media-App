@@ -10,22 +10,35 @@ const uploadpost = multer({ dest: path.resolve(__dirname, '../public/images/post
 
 // GET: /
 
-router.get('/', (req, res, next) => {
+router.get('/', (req, res) => {
   res.render('index');
 });
 
 router.post('/register', upload.single('file'), (req, res, next) => {
-  id = req.params.id;
+  console.log(req.body);
+  req.checkBody('userdata.username', 'Username is required').notEmpty();
+  req.checkBody('userdata.password', 'Password is required').notEmpty();
+  req.checkBody('userdata.email', 'Email is required').notEmpty();
+
+  const id = req.params.id;
   const username = req.body.userdata.username;
   const password = req.body.userdata.password;
   const email = req.body.userdata.email;
+  const errors = req.validationErrors();
 
-  let photo = '';
-  if (req.file) {
-    photo = req.file.filename;
+  if (errors) {
+    console.log('Failed something went worong !!');
+    const object = {
+      data: errors,
+    };
+    res.send(JSON.stringify(object));
   } else {
-    photo = 'images.png';
-  }
+    let photo = '';
+    if (req.file) {
+      photo = req.file.filename;
+    } else {
+      photo = 'images.png';
+    }
 
     const query = DB.builder()
     .insert()
@@ -36,26 +49,35 @@ router.post('/register', upload.single('file'), (req, res, next) => {
      .set('image', photo)
      .toParam();
 
-    DB.executeQuery(query, (error ,data) => {
+    DB.executeQuery(query, (error, data) => {
       if (error) {
         next(error);
         return;
       }
 
-      let object={
-          data: data.id
-      }
-
-      res.end( JSON.stringify(object));
+      const object = {
+        data: data.id,
+      };
+      res.end(JSON.stringify(object));
     });
-  });
+  }
+});
 
 router.post('/login', (req, res, next) => {
-
+  req.checkBody('userdata.email', 'Email is required').notEmpty();
+  req.checkBody('userdata.password', 'Password is required').notEmpty();
   const email = req.body.userdata.email;
   const password = req.body.userdata.password;
   const session = req.session;
+  const errors = req.validationErrors();
 
+  if (errors) {
+    console.log('Failed something went worong !!');
+    const object = {
+      data: errors,
+    };
+    res.send(JSON.stringify(object));
+  } else {
     const query = DB.builder()
     .select()
     .field('username')
@@ -73,18 +95,18 @@ router.post('/login', (req, res, next) => {
         session.user_id = results.rows[0].id;
         session.mail = email;
 
-      let data={
-        id : results.rows[0].id,
+        const data = {
+          id: results.rows[0].id,
+        };
+        res.send(data);
       }
-      res.send(data);
-    }
-  });
+    });
+  }
 });
 
 router.get('/home/:id', (req, res, next) => {
-
-  console.log("login")
-  id = req.params.id;
+  console.log("login");
+  const id = req.params.id;
   let query;
   query = DB.builder()
    .select()
@@ -103,7 +125,6 @@ router.get('/home/:id', (req, res, next) => {
 
   DB.executeQuery(query, (error, tweets) => {
     if (error) {
-
       next(error);
       return;
     }
@@ -128,29 +149,28 @@ router.get('/home/:id', (req, res, next) => {
         return;
       }
       query = DB.builder()
-          .select()
-          .from('follower')
-          .where('login_user = ?', id)
-          .toParam();
-          DB.executeQuery(query, (errortweets, c) => {
-            if (errortweets) {
-              next(errortweets);
-              return;
-            }
+      .select()
+      .from('follower')
+      .where('login_user = ?', id)
+      .toParam();
+      DB.executeQuery(query, (errortweets, c) => {
+        if (errortweets) {
+          next(errortweets);
+          return;
+        }
 
-      let object={
-        count: c.rows.length,
-        follow: follow.rows,
-        tweets: tweets.rows,
-      }
-      res.send(JSON.stringify(object));
+        const object = {
+          count: c.rows.length,
+          follow: follow.rows,
+          tweets: tweets.rows,
+        };
+        res.send(JSON.stringify(object));
+      });
     });
-  });
   });
 });
 
-router.post('/tweet', uploadpost.single('file'), (req, res, next) => {
-
+router.post('/tweet', uploadpost.single('file'), (req, res) => {
   let photo = '';
   if (req.file) {
     photo = req.file.filename;
@@ -173,10 +193,9 @@ router.post('/tweet', uploadpost.single('file'), (req, res, next) => {
     if (error) {
       return;
     }
-    let object = {
-      "ID" : id
-    }
-
+    const object = {
+      ID: id,
+    };
     res.status(200).send(object);
   });
 });
@@ -196,24 +215,20 @@ router.post('/follow', (req, res, next) => {
       next(error);
       return;
     }
-    let object={
-      "Id" : Id
-    }
+    const object = {
+      Id: Id,
+    };
     res.status(200).send(object);
   });
 });
 
-
-
 router.post('/unfollow', (req, res, next) => {
-
   const unfollowid = req.body.unfollowid;
   const Id = req.body.data;
-
   const query = DB.builder()
     .delete()
       .from('follower')
-      .where('follow = ? AND login_user = ?' , unfollowid, Id)
+      .where('follow = ? AND login_user = ?', unfollowid, Id)
       .toParam();
 
   DB.executeQuery(query, (error) => {
@@ -221,26 +236,22 @@ router.post('/unfollow', (req, res, next) => {
       next(error);
       return;
     }
-    let object={
-      "Id" : Id
-    }
+    const object = {
+      Id: Id,
+    };
     res.status(200).send(object);
-
   });
 });
 
 router.get('/logout', (req, res) => {
-  const session = req.session;
-    req.session.destroy(() => {
-      res.status(200).end();
-    });
+  req.session.destroy(() => {
+    res.status(200).end();
+  });
 });
 
 router.get('/profile/:id', (req, res, next) => {
-
-  id = req.params.id;
+  const id = req.params.id;
   let query;
-
   query = DB.builder()
     .select()
     .field('username')
@@ -292,23 +303,23 @@ router.get('/profile/:id', (req, res, next) => {
           return;
         }
         query = DB.builder()
-          .select()
-          .from('follower')
-          .where('login_user = ?', id)
-          .toParam();
-          DB.executeQuery(query, (errortweets, c) => {
-            if (errortweets) {
-              next(errortweets);
-              return;
-            }
+        .select()
+        .from('follower')
+        .where('login_user = ?', id)
+        .toParam();
+        DB.executeQuery(query, (errortweets, c) => {
+          if (errortweets) {
+            next(errortweets);
+            return;
+          }
 
-        let object={
-        count: c.rows.length,
-        follow: follow.rows,
-        tweets: tweets.rows,
-        users: users.rows,
-      }
-        res.status(200).send(object);
+          const object = {
+            count: c.rows.length,
+            follow: follow.rows,
+            tweets: tweets.rows,
+            users: users.rows,
+          };
+          res.status(200).send(object);
         });
       });
     });
@@ -316,8 +327,7 @@ router.get('/profile/:id', (req, res, next) => {
 });
 
 router.get('/editprofile/:id', (req, res) => {
-
-  id = req.params.id;
+  const id = req.params.id;
   let query;
   query = DB.builder()
     .select()
@@ -335,32 +345,30 @@ router.get('/editprofile/:id', (req, res) => {
       return;
     }
     query = DB.builder()
-          .select()
-          .from('follower')
-          .where('login_user = ?', id)
-          .toParam();
-          DB.executeQuery(query, (errortweets, c) => {
-            if (errortweets) {
-              next(errortweets);
-              return;
-            }
+    .select()
+    .from('follower')
+    .where('login_user = ?', id)
+    .toParam();
+    DB.executeQuery(query, (errortweets, c) => {
+      if (errortweets) {
+        next(errortweets);
+        return;
+      }
 
-        let object={
+      const object = {
         count: c.rows.length,
         users: users.rows,
-      }
+      };
       res.end(JSON.stringify(object));
     });
   });
 });
 
-router.post('/editprofile/:id', upload.single('file'), (req, res, next) => {
-
-  id = req.params.id;
+router.post('/editprofile/:id', upload.single('file'), (req, res) => {
+  const id = req.params.id;
   const username = req.body.userdata.username;
   const password = req.body.userdata.password;
   const email = req.body.userdata.email;
-
   let photo = '';
   if (req.file) {
     photo = req.file.filename;
@@ -382,10 +390,10 @@ router.post('/editprofile/:id', upload.single('file'), (req, res, next) => {
     if (error) {
       console.log('Error', error);
     }
-    let object={
-        data: data.id
-    }
-      res.status(200).send(object);
+    const object = {
+      data: data.id,
+    };
+    res.status(200).send(object);
   });
 });
 module.exports = router;
