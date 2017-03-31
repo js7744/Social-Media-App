@@ -1,5 +1,4 @@
 const express = require('express');
-const nodemailer = require('nodemailer');
 const DB = require('../helpers/db');
 
 const router = express.Router();
@@ -12,25 +11,10 @@ const uploadpost = multer({ dest: path.resolve(__dirname, '../public/images/post
 // GET: /
 
 router.get('/', (req, res, next) => {
-  const query = DB.builder()
-    .select()
-    .function('NOW()')
-    .toParam();
-
-  DB.executeQuery(query, (error, results) => {
-    if (error) {
-      next(error);
-      return;
-    }
-
-    res.render('index', {
-      title: `Time from the database is ${results.rows[0].now}`,
-    });
-  });
+  res.render('index');
 });
 
 router.post('/register', upload.single('file'), (req, res, next) => {
-
   id = req.params.id;
   const username = req.body.userdata.username;
   const password = req.body.userdata.password;
@@ -61,6 +45,7 @@ router.post('/register', upload.single('file'), (req, res, next) => {
       let object={
           data: data.id
       }
+
       res.end( JSON.stringify(object));
     });
   });
@@ -88,16 +73,17 @@ router.post('/login', (req, res, next) => {
         session.user_id = results.rows[0].id;
         session.mail = email;
 
-        let data={
-          id : session.user_id
-        }
-        res.end( JSON.stringify(data))
+      let data={
+        id : results.rows[0].id,
       }
-    });
+      res.send(data);
+    }
   });
+});
 
 router.get('/home/:id', (req, res, next) => {
 
+  console.log("login")
   id = req.params.id;
   let query;
   query = DB.builder()
@@ -157,13 +143,14 @@ router.get('/home/:id', (req, res, next) => {
         follow: follow.rows,
         tweets: tweets.rows,
       }
-      res.end(JSON.stringify(object));
+      res.send(JSON.stringify(object));
     });
   });
   });
 });
 
 router.post('/tweet', uploadpost.single('file'), (req, res, next) => {
+
   let photo = '';
   if (req.file) {
     photo = req.file.filename;
@@ -172,7 +159,6 @@ router.post('/tweet', uploadpost.single('file'), (req, res, next) => {
   }
   const tweet = req.body.data;
   const id = req.body.userid;
-
   const query = DB.builder()
     .insert()
       .into('tweet')
@@ -190,7 +176,8 @@ router.post('/tweet', uploadpost.single('file'), (req, res, next) => {
     let object = {
       "ID" : id
     }
-    res.send(JSON.stringify(object));
+
+    res.status(200).send(object);
   });
 });
 
@@ -212,55 +199,11 @@ router.post('/follow', (req, res, next) => {
     let object={
       "Id" : Id
     }
-    res.send(JSON.stringify(object));
+    res.status(200).send(object);
   });
 });
 
-router.get('/followmore', (req, res, next) => {
-  const session = req.session;
-  let query;
-  if (req.session.mail) {
-    query = DB.builder()
-    .select()
-    .field('username')
-    .field('image')
-    .from('registeruser', 'users')
-    .where('id = ?', req.session.user_id)
-    .toParam();
 
-    DB.executeQuery(query, (error3, users) => {
-      if (error3) {
-        next(error3);
-        return;
-      }
-
-      query = DB.builder()
-      .select()
-      .from('registeruser')
-      .where('id != ?', req.session.user_id)
-      .where('id NOT IN ?',
-       DB.builder()
-         .select()
-         .field('follow')
-         .from('follower')
-         .where('login_user = ?', req.session.user_id))
-         .toParam();
-
-      DB.executeQuery(query, (error4, follow) => {
-        if (error4) {
-          next(error4);
-          return;
-        }
-        res.render('followmore', {
-          users: users.rows,
-          follow: follow.rows,
-        });
-      });
-    });
-  } else {
-    res.render('index');
-  }
-});
 
 router.post('/unfollow', (req, res, next) => {
 
@@ -281,7 +224,7 @@ router.post('/unfollow', (req, res, next) => {
     let object={
       "Id" : Id
     }
-    res.send(JSON.stringify(object));
+    res.status(200).send(object);
 
   });
 });
@@ -289,7 +232,7 @@ router.post('/unfollow', (req, res, next) => {
 router.get('/logout', (req, res) => {
   const session = req.session;
     req.session.destroy(() => {
-      res.end();
+      res.status(200).end();
     });
 });
 
@@ -340,7 +283,7 @@ router.get('/profile/:id', (req, res, next) => {
       .join(DB.builder().select().from('follower'), 'u', 'regs.id= u.follow')
       .where('regs.id != ?', id)
       .order('RANDOM()')
-      .limit(5)
+      .limit(4)
       .toParam();
 
       DB.executeQuery(query, (error4, follow) => {
@@ -365,7 +308,7 @@ router.get('/profile/:id', (req, res, next) => {
         tweets: tweets.rows,
         users: users.rows,
       }
-        res.end(JSON.stringify(object));
+        res.status(200).send(object);
         });
       });
     });
@@ -442,7 +385,7 @@ router.post('/editprofile/:id', upload.single('file'), (req, res, next) => {
     let object={
         data: data.id
     }
-      res.end(JSON.stringify(object));
+      res.status(200).send(object);
   });
 });
 module.exports = router;

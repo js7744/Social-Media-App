@@ -18,54 +18,39 @@ class Home extends Component {
     this.onFiledChange = this.onFiledChange.bind(this);
     this.onsubmittweet = this.onsubmittweet.bind(this);
     this.onfollow = this.onfollow.bind(this);
-    this.onclick = this.onclick.bind(this);
   }
 
-  onclick(e) {
+  homeapicall(){
     let id = this.props.params.id;
-    axios.get('http://localhost:8000/logout', {
-      userdata: this.state,
-    })
-
-    .then(function (response) {
-      cookie.remove(id, {path: '/'});
-      browserHistory.push('/login');
-    })
-
-    .catch(function (error) {
-      console.log(error);
-    });
-      e.preventDefault(e);
-  }
-
-  componentWillMount() {
-    if(cookie.load(this.props.params.id)) {
-    let userId = this.props.params.id;
-    axios.get('http://localhost:8000/home/' + userId)
-    .then(res => {
-      const data= res.data;
-      this.setState({
-        data: data,
-      })
-    });
+    let userId = cookie.load(id);
+    if(userId) {
+      axios.get('http://localhost:8000/home/' + userId)
+      .then(res => {
+        // console.log(res.data);
+        const data= res.data;
+        this.setState({
+          data: res.data,
+        })
+      });
     } else {
       browserHistory.push('/login');
     }
   }
 
+  componentWillMount() {
+    this.homeapicall();
+  }
+
+
   onfollow(id) {
+    let self = this;
     let Id = this.props.params.id;
     axios.post('http://localhost:8000/follow', {
       data : Id,
       followerid: id,
     })
     .then(function (response) {
-      return false;
-      if (response.data.Id) {
-        browserHistory.push("/home/" + response.data.Id)
-      } else {
-        browserHistory.push("/home/" + response.data.Id)
-      }
+        self.homeapicall();
     })
     .catch(function (error) {
     })
@@ -78,8 +63,12 @@ class Home extends Component {
       data : this.state.tweettxt,
       userid : id,
     })
+
     .then(function (response) {
-      location.reload();
+      self.homeapicall();
+      self.setState({
+        tweettxt: '',
+      })
     })
     .catch(function (error) {
     });
@@ -95,7 +84,7 @@ class Home extends Component {
 
   render() {
     var tweet= [];
-      if(this.state.data.count){
+      if(this.state.data){
         for(var i = 0; i < this.state.data.tweets.length; i++) {
           if(this.state.data.tweets[i].post_image) {
             let imgsrc = '', tweetimg='', createdAt='';
@@ -132,7 +121,7 @@ class Home extends Component {
                     <hr />
                     <div className="post-content">
                         <h4 key={i} >{this.state.data.tweets[i].tweettxt}</h4>
-                        <img className="" src={ tweetimg } width="100%" height="100%" alt="userpost" />
+                        <img className="tweetImg" src={ tweetimg } width="100%" height="100%" alt="userpost" />
                     </div>
                     <hr/>
                     <div>
@@ -246,8 +235,10 @@ class Home extends Component {
                     type="hidden"
                     name="followerId"/>
                   <input
-                    onClick={this.onfollow.bind(this, a)}
-                    id={a}
+                    onClick={ (e) => {
+                      this.onfollow(a);
+                      e.preventDefault();
+                    }}
                     type="submit"
                     value="Follow"
                     className="btn-sm btn-info waves-effect waves-light"/>
@@ -279,7 +270,7 @@ class Home extends Component {
               <ul className="nav navbar-nav navbar-right">
               <li><Link to={home}>Home</Link></li>
               <li><Link to={profile}>Profile</Link></li>
-              <li><Link to="logout" onClick={this.onclick} >Logout</Link></li>
+              <li><Link to="/logout">Logout</Link></li>
               </ul>
             </div>
           </div>

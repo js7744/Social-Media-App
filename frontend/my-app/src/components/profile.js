@@ -18,27 +18,10 @@ class Profile extends Component {
       this.onFiledChange = this.onFiledChange.bind(this);
       this.onsubmittweet = this.onsubmittweet.bind(this);
       this.onUnfollow = this.onUnfollow.bind(this);
-      this.onclick = this.onclick.bind(this);
     }
 
-  onclick(e) {
-    let id = this.props.params.id;
-    axios.get('http://localhost:8000/logout', {
-      userdata: this.state,
-    })
-
-    .then(function (response) {
-      cookie.remove(id, {path: '/'});
-      browserHistory.push('/login');
-    })
-
-    .catch(function (error) {
-      console.log(error);
-    });
-      e.preventDefault(e);
-  }
-
-  componentWillMount() {
+  profileapicall(){
+    console.log("======>>>",cookie.load(this.props.params.id))
     if(cookie.load(this.props.params.id)) {
     let userId = this.props.params.id;
     axios.get('http://localhost:8000/profile/' + userId)
@@ -53,18 +36,18 @@ class Profile extends Component {
     }
   }
 
+  componentWillMount() {
+    this.profileapicall();
+  }
+
   onUnfollow(id) {
-    let Id = this.props.params.id;
+    let self = this;
     axios.post('http://localhost:8000/unfollow', {
-      data : Id,
+      data : this.props.params.id,
       unfollowid: id,
     })
     .then(function (response) {
-      if (response.data.Id) {
-        browserHistory.push("/profile/" + response.data.Id)
-      } else {
-        browserHistory.push("/profile/" + response.data.Id)
-      }
+      self.profileapicall();
     })
     .catch(function (error) {
     })
@@ -72,13 +55,16 @@ class Profile extends Component {
 
   onsubmittweet(e) {
     let self = this;
-    let id = this.props.params.id
+    let id = this.props.params.id;
     axios.post('http://localhost:8000/tweet', {
       data : this.state.tweettxt,
       userid : id,
     })
     .then(function (response) {
-      location.reload();
+      self.profileapicall();
+      self.setState({
+        tweettxt: '',
+      })
     })
     .catch(function (error) {
       console.log(error);
@@ -96,7 +82,7 @@ class Profile extends Component {
   render() {
     var tweet= [];
     console.log(this.state.data.count)
-      if(this.state.data.count){
+      if(this.state.data){
         for(var i = 0; i < this.state.data.tweets.length; i++) {
           if(this.state.data.tweets[i].post_image) {
             let imgsrc = '', tweetimg='', createdAt='';
@@ -133,7 +119,7 @@ class Profile extends Component {
                     <hr />
                     <div className="post-content">
                         <h4 key={i} >{this.state.data.tweets[i].tweettxt}</h4>
-                        <img className="" src={ tweetimg } width="100%" height="100%" alt="userpost" />
+                        <img className="tweetImg" src={ tweetimg } width="100%" height="100%" alt="userpost" />
                     </div>
                     <hr/>
                     <div>
@@ -244,7 +230,13 @@ class Profile extends Component {
                 <h3>{this.state.data.follow[i].username}</h3>
                 <form >
                   <input type="hidden" name="followId" value={a}/>
-                  <input onClick={this.onUnfollow.bind(this, a)} id={a} type="submit" value="UnFollow" className="btn-sm btn-info waves-effect waves-light"/>
+                  <input onClick={ (e) => {
+                      this.onUnfollow(a);
+                      e.preventDefault();
+                    }}
+                    type="submit"
+                    value="UnFollow"
+                    className="btn-sm btn-info waves-effect waves-light"/>
                 </form>
               </div>
           );
@@ -280,7 +272,7 @@ class Profile extends Component {
               <ul className="nav navbar-nav navbar-right" id="profileNav">
               <li><Link to={home}>Home</Link></li>
               <li><Link to={editprofile}>EditProfile</Link></li>
-              <li><Link to="logout" onClick={this.onclick} >Logout</Link></li>
+              <li><Link to="/logout">Logout</Link></li>
               </ul>
             </div>
           </div>

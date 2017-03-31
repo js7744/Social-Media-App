@@ -30,9 +30,12 @@ class Login extends Component {
     })
 
     .then(function (response) {
-      cookie.save(response.data.id, 'user_Id:' + response.data.id, { path: '/'});
+
       if(response.data.id){
-        browserHistory.push("/home/" + response.data.id )
+        let userId = response.data.id;
+        console.log("--->>>>>", userId)
+        cookie.save(userId, userId);
+        browserHistory.push("/home/" + userId);
       } else {
         browserHistory.push("/login")
       }

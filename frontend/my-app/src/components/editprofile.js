@@ -18,11 +18,17 @@ class Editprofile extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    componentWillMount() {
+  editprofileapicall() {
     if(cookie.load(this.props.params.id)) {
     let userId = this.props.params.id;
     axios.get('http://localhost:8000/editprofile/' + userId)
     .then(res => {
+
+      this.setState({
+        username: res.data.users[0].username,
+        email: res.data.users[0].email,
+        password: res.data.users[0].password,
+      })
       const data= res.data;
       this.setState({
         data: data,
@@ -33,16 +39,26 @@ class Editprofile extends Component {
     }
   }
 
+  componentWillMount() {
+    this.editprofileapicall();
+  }
+
   handleSubmit(e) {
+    let self = this;
     alert("values sucessfuly update..!!")
     let id = this.props.params.id;
     axios.post('http://localhost:8000/editprofile/' + id,
      {
       userdata : this.state,
-      userid : id,
+      userid : this.props.params.id,
     })
     .then(function (response) {
-      location.reload();
+      self.editprofileapicall();
+      self.setState({
+        username: '',
+        email: '',
+        password: '',
+      })
     })
     .catch(function (error) {
       console.log(error);
@@ -57,26 +73,25 @@ class Editprofile extends Component {
     });
   }
 
+
   render() {
-
     var editprofile = [];
-    if(this.state.data.count){
-
-        editprofile.push(
-            <div className="panel-body">
-                    <h3 className="panel-title pull-left">Your Info</h3>
-                    <br/><br/>
-                    <form className="form-horizontal">
-                        <label>Username</label>
-                        <input onChange={this.onFiledChange} value={this.state.username} type="text" className="form-control" id="First_name" name="username"/>
-                        <label>Email</label>
-                        <input onChange={this.onFiledChange} value={this.state.email} type="email" className="form-control" id="Last_name" name="email"/>
-                        <label>Password</label>
-                        <input onChange={this.onFiledChange} value={this.state.password} type="password" className="form-control" id="Last_name" name="password"/>
-                    </form><br/>
-                    <button onClick={this.handleSubmit} className="btn btn-primary">submit</button>
-                </div>
-            )
+    if(this.state.data){
+          editprofile.push(
+              <div className="panel-body">
+                      <h3 className="panel-title pull-left">Your Info</h3>
+                      <br/><br/>
+                      <form className="form-horizontal">
+                          <label>Username</label>
+                          <input name="username" onChange={this.onFiledChange} value={this.state.username} type="text" className="form-control" id="First_name" />
+                          <label>Email</label>
+                          <input name="email" onChange={this.onFiledChange} value={this.state.email} type="email" className="form-control" id="Last_name" />
+                          <label>Password</label>
+                          <input name="password" onChange={this.onFiledChange} value={this.state.password} type="password" className="form-control" id="Last_name" />
+                      </form><br/>
+                      <button onClick={this.handleSubmit} className="btn btn-primary">submit</button>
+                  </div>
+              )
 
     }
 
@@ -105,7 +120,7 @@ class Editprofile extends Component {
               <ul className="nav navbar-nav navbar-right" id="editProfileNav">
               <li><Link to={Home}>Home</Link></li>
               <li><Link to={Profile}>Profile</Link></li>
-              <li><Link to="logout" onClick={this.onclick} >Logout</Link></li>
+              <li><Link to="/logout">Logout</Link></li>
               </ul>
             </div>
           </div>

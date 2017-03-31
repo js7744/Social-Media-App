@@ -39,6 +39,8 @@
     line-height: 20px;
 }
 
+
+
 #homeContent.Content {
   margin-left: 5%;
   margin-right: 12%;
@@ -95,6 +97,10 @@
     box-shadow: -4px 3px 20px 0px rgba(0, 0, 0, 0.32);
 }
 
+img.tweetImg {
+    padding-top: 2%;
+}
+
 #firstPannel.panel.panel-default {
     border: 0px;
     border-radius: 4px;
@@ -113,7 +119,8 @@
 }
 
 strong#followheader {
-color: grey;
+  color: grey;
+  padding-left: 3%;
 }
 
 .panel {

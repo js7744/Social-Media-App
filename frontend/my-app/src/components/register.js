@@ -17,13 +17,18 @@ class Register extends Component {
   }
 
   handleSubmit(e){
+    let self = this
     axios.post('http://localhost:8000/register', {
       userdata: this.state,
     })
 
     .then(function (response) {
       alert("Sucessdully Register")
-      location.reload();
+      self.setState({
+        username: '',
+        email: '',
+        password:'',
+      })
     })
     .catch(function (error) {
       console.log(error);

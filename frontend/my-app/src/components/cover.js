@@ -7,6 +7,7 @@ import c from '../assets/images/c.jpg';
 class Cover extends Component {
   render() {
     return (
+      <div className="coverCarousel">
       <div id="carousel-example-generic" className="carousel slide" data-ride="carousel">
 
         <ol className="carousel-indicators">
@@ -49,6 +50,7 @@ class Cover extends Component {
           <span className="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
           <span className="sr-only">Next</span>
         </a>
+      </div>
       </div>
     );
   }

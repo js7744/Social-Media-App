@@ -76,6 +76,10 @@
   margin-bottom: 2%;
 }
 
+img.tweetImg {
+    padding-top: 2%;
+}
+
 #followFriends.thumbnail {
     display: block;
     padding: 0px;

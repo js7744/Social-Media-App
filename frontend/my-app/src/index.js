@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { Router, IndexRoute, Route, browserHistory } from 'react-router';
 import App from './components/App';
 import Login from './components/login';
+import logout from './components/logout';
 import Register from './components/register';
 import Cover from './components/cover';
 import Home from './components/home';
@@ -16,6 +17,8 @@ ReactDOM.render((
       <IndexRoute path="/cover" component={Cover} />
       <Route path="/login" component={Login} />
       <Route path="/register" component={Register} />
+      <Route path="/logout" component={logout} />
+
     </Route>
     <Route path="/home/:id" components={Home} />
     <Route path="/profile/:id" components={Profile} />
